@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    ports:
+      - "8119:5432"
+    environment:
+      POSTGRES_DB: login
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+  backend:
+    build:
+      context: ./Backend
+    container_name: backend-login
+    ports:
+      - "3092:3092"
+    depends_on:
+      - postgres
+    networks:
+      - app-net
+
+  forgot:
+    build:
+      context: ./Forgot
+    container_name: forgot-ui
+    ports:
+      - "7938:80"
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
+  login:
+    build:
+      context: ./Login
+    container_name: login-ui
+    ports:
+      - "7939:80"
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
+  sign_up:
+    build:
+      context: ./Sign_Up
+    container_name: signup-ui
+    ports:
+      - "7940:80"
+    depends_on:
+      - backend
+    networks:
+      - app-net
+
+volumes:
+  pgdata:
+
+networks:
+  app-net:
+    driver: bridge
+

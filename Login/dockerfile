@@ -1,0 +1,7 @@
+# Forgot/Dockerfile, Login/Dockerfile, Sign_Up/Dockerfile
+FROM nginx:alpine
+
+COPY . /usr/share/nginx/html
+
+EXPOSE 80
+
